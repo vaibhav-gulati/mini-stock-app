@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+
+import React, { useState, useEffect } from 'react';
+import StockSelector from './components/StockSelector';
+import StockPriceDisplay from './components/StockPriceDisplay';
+import './App.css'; 
+
+const predefinedStocks = [
+  { name: 'Company A', symbol: 'A' },
+  { name: 'Company B', symbol: 'B' },
+  { name: 'Company C', symbol: 'C' },
+  { name: 'Company D', symbol: 'D' },
+
+];
+
 
 function App() {
+  const [selectedStock, setSelectedStock] = useState('');
+  const [priceHistory, setPriceHistory] = useState([]);
+  const [timestampHistory, setTimestampHistory] = useState([]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Mini Stock Price Tracker</h1>
+      <StockSelector stocks={predefinedStocks} onSelect={setSelectedStock} />
+      {selectedStock && (
+        <div>
+          <StockPriceDisplay
+            selectedStock={selectedStock}
+            onPriceUpdate={(newPrice) => {
+              setPriceHistory([...priceHistory, newPrice]);
+              setTimestampHistory([...timestampHistory, new Date().getTime()]);
+            }}
+          />
+
+        </div>
+      )}
     </div>
   );
 }
 
 export default App;
+
